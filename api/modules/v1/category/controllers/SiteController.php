@@ -5,12 +5,16 @@ namespace api\modules\v1\category\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\category\models\Category;
+use api\modules\v1\category\models\search\CategorySearch;
+use api\traits\ExportExcelTrait;
 use common\models\form\CategoryForm;
 use Yii;
 use yii\db\Exception;
 
 class SiteController extends Controller
 {
+    use ExportExcelTrait;
+
     /**
      * @throws Exception
      */
@@ -46,5 +50,20 @@ class SiteController extends Controller
             $message = 'Create category failed';
         }
         return ResultHelper::build($data, $statusCode, $error, $message);
+    }
+
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport(): array
+    {
+        $data = (new CategorySearch())->search(Yii::$app->request->queryParams)->getModels();
+        $fileName = 'export_category_' . date('YmdHis') . '.xlsx';
+        $fileDir = Yii::getAlias('@app/export/');
+        if (!is_dir($fileDir)) {
+            mkdir($fileDir, 0777, true);
+        }
+        $filePath = $fileDir . $fileName;
+        return $this->exportExcel($data, $filePath, $fileName);
     }
 }
