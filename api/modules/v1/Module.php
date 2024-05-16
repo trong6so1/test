@@ -29,6 +29,9 @@ class Module extends \yii\base\Module
             ],
             'service' => [
                 'class' => service\Module::class,
+            ],
+            'order' => [
+                'class' => order\Module::class,
             ]
         ];
     }
