@@ -5,12 +5,16 @@ namespace api\modules\v1\order\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\order\models\OrderPaymentMethod;
+use api\modules\v1\order\models\search\OrderPaymentMethodSearch;
+use api\traits\ExportExcelTrait;
 use common\models\form\OrderPaymentMethodForm;
 use Yii;
 use yii\db\Exception;
 
 class OrderPaymentMethodController extends Controller
 {
+    use ExportExcelTrait;
+
     /**
      * @throws Exception
      */
@@ -46,5 +50,20 @@ class OrderPaymentMethodController extends Controller
             $message = 'Create order payment method failed';
         }
         return ResultHelper::build($data, $statusCode, $error, $message);
+    }
+
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport(): array
+    {
+        $data = (new OrderPaymentMethodSearch())->search(Yii::$app->request->queryParams)->getModels();
+        $fileName = 'export_order_payment_method_' . date('YmdHis') . '.xlsx';
+        $fileDir = Yii::getAlias('@app/export/');
+        if (!is_dir($fileDir)) {
+            mkdir($fileDir, 0777, true);
+        }
+        $filePath = $fileDir . $fileName;
+        return $this->exportExcel($data, $filePath, $fileName);
     }
 }
