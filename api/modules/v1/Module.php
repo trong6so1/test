@@ -24,6 +24,9 @@ class Module extends \yii\base\Module
             'customer' => [
                 'class' => customer\Module::class,
             ],
+            'product' => [
+                'class' => product\Module::class,
+            ],
         ];
     }
 
