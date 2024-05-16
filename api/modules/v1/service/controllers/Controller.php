@@ -12,6 +12,7 @@ class Controller extends \yii\rest\Controller
     {
         return [
             'create' => ['POST'],
+            'export' => ['GET']
         ];
     }
 
@@ -31,6 +32,11 @@ class Controller extends \yii\rest\Controller
                     'allow' => true,
                     'actions' => ['create'],
                     'roles' => ['administrator'],
+                ],
+                [
+                    'allow' => true,
+                    'actions' => ['export'],
+                    'roles' => ['@'],
                 ],
             ],
         ];
