@@ -5,6 +5,8 @@ namespace api\modules\v1\customer\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\customer\models\Customer;
+use api\modules\v1\customer\models\search\CustomerSearch;
+use api\traits\ExportExcelTrait;
 use common\models\base\BaseCustomerGroup;
 use common\models\form\CustomerForm;
 use Yii;
@@ -12,6 +14,8 @@ use yii\db\Exception;
 
 class SiteController extends Controller
 {
+    use ExportExcelTrait;
+
     /**
      * @throws Exception
      */
@@ -55,5 +59,20 @@ class SiteController extends Controller
             $message = 'Create customer failed';
         }
         return ResultHelper::build($data, $statusCode, $error, $message);
+    }
+
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport(): array
+    {
+        $data = (new CustomerSearch())->search(Yii::$app->request->queryParams)->getModels();
+        $fileName = 'export_customer_' . date('YmdHis') . '.xlsx';
+        $fileDir = Yii::getAlias('@app/export/');
+        if (!is_dir($fileDir)) {
+            mkdir($fileDir, 0777, true);
+        }
+        $filePath = $fileDir . $fileName;
+        return $this->exportExcel($data, $filePath, $fileName);
     }
 }
