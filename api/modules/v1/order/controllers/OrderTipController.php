@@ -5,16 +5,12 @@ namespace api\modules\v1\order\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\order\models\OrderTip;
-use api\modules\v1\order\models\search\OrderTipSearch;
-use api\traits\ExportExcelTrait;
 use common\models\form\OrderTipForm;
 use Exception;
 use Yii;
 
 class OrderTipController extends Controller
 {
-    use ExportExcelTrait;
-
     /**
      * @throws Exception
      */
@@ -50,20 +46,5 @@ class OrderTipController extends Controller
             $message = 'Create order tip failed';
         }
         return ResultHelper::build($data, $statusCode, $error, $message);
-    }
-
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     */
-    public function actionExport(): array
-    {
-        $data = (new OrderTipSearch())->search(Yii::$app->request->queryParams)->getModels();
-        $fileName = 'export_order_tip_' . date('YmdHis') . '.xlsx';
-        $fileDir = Yii::getAlias('@app/export/');
-        if (!is_dir($fileDir)) {
-            mkdir($fileDir, 0777, true);
-        }
-        $filePath = $fileDir . $fileName;
-        return $this->exportExcel($data, $filePath, $fileName);
     }
 }
