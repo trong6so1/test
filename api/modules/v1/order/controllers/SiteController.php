@@ -1,0 +1,50 @@
+<?php
+
+namespace api\modules\v1\order\controllers;
+
+use api\helper\response\ApiConstant;
+use api\helper\response\ResultHelper;
+use api\modules\v1\order\models\Order;
+use common\models\form\OrderForm;
+use Yii;
+use yii\db\Exception;
+
+class SiteController extends Controller
+{
+    /**
+     * @throws Exception
+     */
+    public function actionCreate(): array
+    {
+        $modelForm = new OrderForm();
+        $modelForm->load(Yii::$app->request->post(), '');
+        if ($modelForm->validate()) {
+            $order = new Order();
+            $order->setAttributes($modelForm->attributes, false);
+            if ($order->validate()) {
+                if ($order->save()) {
+                    $statusCode = ApiConstant::SC_OK;
+                    $data = $order;
+                    $error = null;
+                    $message = 'Create order success';
+                } else {
+                    $statusCode = ApiConstant::SC_EXCEPTION;
+                    $data = null;
+                    $error = 'There was an error during the adding process';
+                    $message = 'Create order failed';
+                }
+            } else {
+                $statusCode = ApiConstant::SC_BAD_REQUEST;
+                $data = null;
+                $error = $order->errors;
+                $message = 'Create order failed';
+            }
+        } else {
+            $statusCode = ApiConstant::SC_BAD_REQUEST;
+            $data = null;
+            $error = $modelForm->errors;
+            $message = 'Create order failed';
+        }
+        return ResultHelper::build($statusCode, $data, $error, $message);
+    }
+}
