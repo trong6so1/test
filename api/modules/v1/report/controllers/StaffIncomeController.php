@@ -38,10 +38,6 @@ class StaffIncomeController extends Controller
         $data = $dataProvider->search(Yii::$app->request->queryParams)->getModels();
         $fileName = 'export_report_staff_income_' . date('YmdHis') . '.xlsx';
         $fileDir = Yii::getAlias('@app/export/');
-        if (!is_dir($fileDir)) {
-            mkdir($fileDir, 0777, true);
-        }
-        $filePath = $fileDir . $fileName;
-        return $this->exportExcel($data, $filePath, $fileName, $fields);
+        return $this->exportExcel($data, $fileDir, $fileName, $fields);
     }
 }
