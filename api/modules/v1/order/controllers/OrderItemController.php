@@ -59,10 +59,6 @@ class OrderItemController extends Controller
         $data = (new OrderItemSearch())->search(Yii::$app->request->queryParams)->getModels();
         $fileName = 'export_order_item_' . date('YmdHis') . '.xlsx';
         $fileDir = Yii::getAlias('@app/export/');
-        if (!is_dir($fileDir)) {
-            mkdir($fileDir, 0777, true);
-        }
-        $filePath = $fileDir . $fileName;
-        return $this->exportExcel($data, $filePath, $fileName);
+        return $this->exportExcel($data, $fileDir, $fileName);
     }
 }
