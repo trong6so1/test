@@ -14,7 +14,7 @@ trait ExportExcelTrait
     /**
      * @throws Exception
      */
-    public function exportExcel($data, $filePath, $fileName, $fields = null, $header = null): array
+    public function exportExcel($data, $fileDir, $fileName, $fields = null, $header = null): array
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -36,16 +36,19 @@ trait ExportExcelTrait
                 $sheet->fromArray($rowData, null, 'A' . $row);
             }
         }
+        if (!is_dir($fileDir)) {
+            mkdir($fileDir, 0777, true);
+        }
+        $filePath = $fileDir . $fileName;
         $write = new Xlsx($spreadsheet);
         $write->save($filePath);
         $statusCode = ApiConstant::SC_OK;
         $data = [
-            'filePath' => $filePath,
+            'filePath' =>$filePath,
             'fileName' => $fileName,
         ];
         $error = null;
         $message = "Export successfully";
-
         return ResultHelper::build($statusCode, $data, $error, $message);
     }
 }
