@@ -11,7 +11,7 @@ class OrderPaymentMethodSearch extends OrderPaymentMethod
     public function search($request = null): ActiveDataProvider
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => OrderPaymentMethodOrderPaymentMethod::find(),
+            'query' => OrderPaymentMethod::find(),
             'pagination' => [
                 'pageSize' => $request['pageSize'] ?? false,
             ]
