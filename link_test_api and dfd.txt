@@ -6,4 +6,4 @@ Luồng dữ liệu export dữ liệu truyền vào:
 	+ Lưu file trên vào filePath 
 	+ Return kết quả trả về cho người dùng
 
-Link text postman: https://documenter.getpostman.com/view/14126026/2sA3Bt29a8
+Link text postman: https://documenter.getpostman.com/view/14126026/2sA3QmEaQt
