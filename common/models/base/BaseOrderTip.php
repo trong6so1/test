@@ -15,6 +15,7 @@ class BaseOrderTip extends ActiveRecord
     {
         return [
             ['order_id', 'exist', 'targetClass' => BaseOrder::class, 'targetAttribute' => ['order_id' => 'id']],
+            ['order_id', 'unique'],
         ];
     }
 
