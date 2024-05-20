@@ -1,0 +1,9 @@
+Luồng dữ liệu export dữ liệu truyền vào:
+	+ Kiểm tra method
+	+ Kiểm tra login, permisstion bằng token
+	+ Thiết lập thông tin về file excel cần export: data, fileName, filePath, fields, header,
+	+ Tạo file sheet và add các thông tin vừa thiết lập vào file sheet đó
+	+ Lưu file trên vào filePath 
+	+ Return kết quả trả về cho người dùng
+
+Link text postman: https://documenter.getpostman.com/view/14126026/2sA3Bt29a8
